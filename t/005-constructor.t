@@ -3,7 +3,6 @@
 use v6;
 use Test;
 
-use lib 'lib';
 use Audio::Libshout;
 
 my $obj;

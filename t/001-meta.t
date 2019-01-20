@@ -4,7 +4,7 @@ use v6;
 
 use Test;
 use Test::META;
-use lib 'lib';
+
 
 plan 1;
 

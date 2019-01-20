@@ -2,7 +2,7 @@
 
 use v6;
 use Test;
-use lib 'lib';
+
 
 use-ok('Audio::Libshout', 'can use Libshout');
 
