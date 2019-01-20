@@ -317,6 +317,8 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
     use NativeCall;
     use AccessorFacade;
 
+    my constant LIB = [ 'shout', v3 ];
+
     # encapsulate (bytes, count) in a type safe way
     subset RawEncode of Array where  ($_.elems == 2 ) && ($_[0] ~~ CArray) && ($_[1] ~~ Int);
 
@@ -370,19 +372,19 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
     }
 
     class Metadata is repr('CPointer') {
-        sub shout_metadata_new( --> Metadata ) is native('shout',v3) { * }
+        sub shout_metadata_new( --> Metadata ) is native(LIB) { * }
 
         method new() {
             shout_metadata_new();
         }
 
-        sub shout_metadata_free(Metadata) is native('shout',v3) { * }
+        sub shout_metadata_free(Metadata) is native(LIB) { * }
 
         method DESTROY() {
             shout_metadata_free(self);
         }
 
-        sub shout_metadata_add(Metadata, Str, Str  --> int32 ) is native('shout',v3) { * }
+        sub shout_metadata_add(Metadata, Str, Str  --> int32 ) is native(LIB) { * }
 
         method add(Str $key is copy, Str $value is copy --> Error ) {
             explicitly-manage($key);
@@ -395,7 +397,7 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
 
     class Shout is repr('CPointer') {
 
-        sub shout_new( --> Shout ) is native('shout',v3) { * }
+        sub shout_new( --> Shout ) is native(LIB) { * }
 
         method new(Shout:U: *%attribs --> Shout ) {
             my $shout = shout_new();
@@ -408,27 +410,27 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
             $shout;
         }
 
-        sub shout_free(Shout --> int32 ) is native('shout',v3) { * }
+        sub shout_free(Shout --> int32 ) is native(LIB) { * }
 
         submethod DESTROY() {
             shout_free(self);
         }
 
-        sub shout_open(Shout) returns int32 is native('shout',v3) { * }
+        sub shout_open(Shout) returns int32 is native(LIB) { * }
 
         method open( --> Error ) {
             my $rc = shout_open(self);
             Error($rc);
         }
 
-        sub shout_close(Shout --> int32 ) is native('shout',v3) { * }
+        sub shout_close(Shout --> int32 ) is native(LIB) { * }
 
         method close( --> Error ) {
             my $rc = shout_close(self);
             Error($rc);
         }
         
-        sub shout_send(Shout, CArray[uint8], int32 --> int32 ) is native('shout',v3) { * }
+        sub shout_send(Shout, CArray[uint8], int32 --> int32 ) is native(LIB) { * }
 
         proto method send(|c) { * }
         multi method send(CArray $buf, Int $elems --> Error ) {
@@ -442,7 +444,7 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
             self.send($carray, $buf.elems);
         }
 
-        sub shout_sync(Shout) is native('shout',v3) { * }
+        sub shout_sync(Shout) is native(LIB) { * }
 
         method sync() {
             shout_sync(self);
@@ -466,97 +468,97 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
 
         # "attributes"
         #
-        sub shout_set_host(Shout, Str --> int32 ) is native('shout',v3) { * }
-        sub shout_get_host(Shout --> Str ) is native('shout',v3) { * }
+        sub shout_set_host(Shout, Str --> int32 ) is native(LIB) { * }
+        sub shout_get_host(Shout --> Str ) is native(LIB) { * }
 
         method host( --> Str ) is rw is accessor-facade(&shout_get_host, &shout_set_host, &manage, &check) { }
 
-        sub shout_set_port(Shout, int32 --> int32 ) is native('shout',v3) { * }
-        sub shout_get_port(Shout --> int32 ) is native('shout',v3) { * }
+        sub shout_set_port(Shout, int32 --> int32 ) is native(LIB) { * }
+        sub shout_get_port(Shout --> int32 ) is native(LIB) { * }
 
         method port( --> Int ) is rw is accessor-facade(&shout_get_port, &shout_set_port, Code, &check) { }
 
-        sub shout_set_user(Shout, Str --> int32 ) is native('shout',v3) { * }
-        sub shout_get_user(Shout --> Str ) is native('shout',v3) { * }
+        sub shout_set_user(Shout, Str --> int32 ) is native(LIB) { * }
+        sub shout_get_user(Shout --> Str ) is native(LIB) { * }
 
         method user( --> Str ) is rw is accessor-facade(&shout_get_user, &shout_set_user, &manage, &check) { }
 
-        sub shout_set_password(Shout, Str --> int32 ) is native('shout',v3) { * }
-        sub shout_get_password(Shout --> Str ) is native('shout',v3) { * }
+        sub shout_set_password(Shout, Str --> int32 ) is native(LIB) { * }
+        sub shout_get_password(Shout --> Str ) is native(LIB) { * }
 
         method password( --> Str ) is rw is accessor-facade(&shout_get_password, &shout_set_password, &manage, &check) { }
 
-        sub shout_get_protocol(Shout --> int32 ) is native('shout',v3) { * }
-        sub shout_set_protocol(Shout, int32 --> int32 ) is native('shout',v3) { * }
+        sub shout_get_protocol(Shout --> int32 ) is native(LIB) { * }
+        sub shout_set_protocol(Shout, int32 --> int32 ) is native(LIB) { * }
 
         method protocol( --> Protocol ) is rw is accessor-facade(&shout_get_protocol, &shout_set_protocol, Code, &check) { }
 
-        sub shout_get_format(Shout --> int32 ) is native('shout',v3) { * }
-        sub shout_set_format(Shout, int32 --> int32 ) is native('shout',v3) { * }
+        sub shout_get_format(Shout --> int32 ) is native(LIB) { * }
+        sub shout_set_format(Shout, int32 --> int32 ) is native(LIB) { * }
 
         method format( --> Format ) is rw is accessor-facade(&shout_get_format, &shout_set_format, Code, &check) { }
 
-        sub shout_get_mount(Shout --> Str ) is native('shout',v3) { * }
-        sub shout_set_mount(Shout, Str --> int32 ) is native('shout',v3) { * }
+        sub shout_get_mount(Shout --> Str ) is native(LIB) { * }
+        sub shout_set_mount(Shout, Str --> int32 ) is native(LIB) { * }
 
         method mount( --> Str ) is rw is accessor-facade(&shout_get_mount, &shout_set_mount, &manage, &check) { }
 
-        sub shout_get_dumpfile(Shout --> Str ) is native('shout',v3) { * }
-        sub shout_set_dumpfile(Shout, Str --> int32 ) is native('shout',v3) { * }
+        sub shout_get_dumpfile(Shout --> Str ) is native(LIB) { * }
+        sub shout_set_dumpfile(Shout, Str --> int32 ) is native(LIB) { * }
 
         method dumpfile( --> Str ) is rw is accessor-facade(&shout_get_dumpfile, &shout_set_dumpfile, &manage, &check ) { }
 
-        sub shout_get_agent(Shout --> Str ) is native('shout',v3) { * }
-        sub shout_set_agent(Shout, Str --> int32 ) is native('shout',v3) { * }
+        sub shout_get_agent(Shout --> Str ) is native(LIB) { * }
+        sub shout_set_agent(Shout, Str --> int32 ) is native(LIB) { * }
 
         method agent(--> Str ) is rw is accessor-facade(&shout_get_agent, &shout_set_agent, &manage, &check) { }
 
         # Directory parameters
-        sub shout_get_public(Shout --> int32 ) is native('shout',v3) { * }
-        sub shout_set_public(Shout, int32 --> int32 ) is native('shout',v3) { * }
+        sub shout_get_public(Shout --> int32 ) is native(LIB) { * }
+        sub shout_set_public(Shout, int32 --> int32 ) is native(LIB) { * }
 
         method public( --> Bool ) is rw is accessor-facade(&shout_get_public, &shout_set_public, Code, &check) { }
 
-        sub shout_get_name(Shout --> Str ) is native('shout',v3) { * }
-        sub shout_set_name(Shout, Str --> int32 ) is native('shout',v3) { * }
+        sub shout_get_name(Shout --> Str ) is native(LIB) { * }
+        sub shout_set_name(Shout, Str --> int32 ) is native(LIB) { * }
 
         method name( --> Str ) is rw is accessor-facade(&shout_get_name, &shout_set_name, &manage, &check) { }
 
-        sub shout_get_url(Shout --> Str ) is native('shout',v3) { * }
-        sub shout_set_url(Shout, Str --> int32 ) is native('shout',v3) { * }
+        sub shout_get_url(Shout --> Str ) is native(LIB) { * }
+        sub shout_set_url(Shout, Str --> int32 ) is native(LIB) { * }
 
         method url( --> Str ) is rw is accessor-facade(&shout_get_url, &shout_set_url, &manage, &check) { }
 
-        sub shout_get_genre(Shout --> Str ) is native('shout',v3) { * }
-        sub shout_set_genre(Shout, Str --> int32 ) is native('shout',v3) { * }
+        sub shout_get_genre(Shout --> Str ) is native(LIB) { * }
+        sub shout_set_genre(Shout, Str --> int32 ) is native(LIB) { * }
 
         method genre( --> Str ) is rw is accessor-facade(&shout_get_genre, &shout_set_genre, &manage, &check) { }
 
-        sub shout_get_description(Shout --> Str ) is native('shout',v3) { * }
-        sub shout_set_description(Shout, Str --> int32 ) is native('shout',v3) { * }
+        sub shout_get_description(Shout --> Str ) is native(LIB) { * }
+        sub shout_set_description(Shout, Str --> int32 ) is native(LIB) { * }
 
         method description( --> Str ) is rw is accessor-facade(&shout_get_description, &shout_set_description, &manage, &check) { }
 
         # Not making a method for these quite yet.
-        sub shout_get_audio_info(Shout, Str --> Str ) is native('shout',v3) { * }
-        sub shout_set_audio_info(Shout, Str, Str --> Str ) is native('shout',v3) { * }
+        sub shout_get_audio_info(Shout, Str --> Str ) is native(LIB) { * }
+        sub shout_set_audio_info(Shout, Str, Str --> Str ) is native(LIB) { * }
 
         # Set the metadata on this instance.
 
-        sub shout_set_metadata(Shout, Metadata --> int32 ) is native('shout',v3) { * }
+        sub shout_set_metadata(Shout, Metadata --> int32 ) is native(LIB) { * }
 
         method set-metadata(Metadata $meta --> Error ) {
             my $rc = shout_set_metadata(self, $meta);
             Error($rc);
         }
 
-        sub shout_get_error(Shout --> Str ) is native('shout',v3) { * };
+        sub shout_get_error(Shout --> Str ) is native(LIB) { * };
 
         method last-error( --> Str ) {
             shout_get_error(self);
         }
 
-        sub shout_get_errno(Shout --> int32 ) is native('shout',v3) { * };
+        sub shout_get_errno(Shout --> int32 ) is native(LIB) { * };
 
         method last-error-number( --> Error ) {
             my $rc = shout_get_errno(self);
@@ -567,7 +569,7 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
     class Initialiser {
         has Int $!initialisers = 0;
 
-        sub shout_init() is native('shout',v3) { * }
+        sub shout_init() is native(LIB) { * }
 
         method init() {
             if $!initialisers == 0 {
@@ -576,7 +578,7 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
             ++$!initialisers;
         }
 
-        sub shout_shutdown() is native('shout',v3) { * }
+        sub shout_shutdown() is native(LIB) { * }
 
         method shutdown() {
             --$!initialisers;
@@ -709,7 +711,7 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
     }
 
 
-    sub shout_version(int32, int32, int32 --> Str ) is native('shout',v3) { * }
+    sub shout_version(int32, int32, int32 --> Str ) is native(LIB) { * }
     method libshout-version( --> Version ) {
         my int32 $major;
         my int32 $minor;
@@ -732,7 +734,6 @@ class Audio::Libshout:ver<0.0.9>:auth<github:jonathanstowe> {
         $!metadata = Metadata;
         $initialiser.shutdown();
     }
-
 }
 
 # vim: expandtab shiftwidth=4 ft=perl6
