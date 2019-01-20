@@ -213,7 +213,8 @@ being thrown.
 
 =head2 host 
 
-The hostname or IP address of the streaming server.  The default is 'localhost'.
+The hostname or IP address of the streaming server.  The default is
+'localhost'.
 
 =head2 port 
 
@@ -221,24 +222,24 @@ The port number on which the server is listening.  The default is 8000
 
 =head2 user 
 
-The username that is used to authenticate against the server, the default is 'source'.
-If the C<protocol> is set to C<ICY> then setting this makes no sense as 'source' is
-always used.
+The username that is used to authenticate against the server, the default
+is 'source'.  If the C<protocol> is set to C<ICY> then setting this
+makes no sense as 'source' is always used.
 
 =head2 password 
 
-The password that is used to authenticate with the server.  There is no default and this
-must be provided before connecting.
+The password that is used to authenticate with the server.  There is no
+default and this must be provided before connecting.
 
 =head2 protocol 
 
-A value of the C<enum> L<Audio::Libshout::Protocol> indicating which protocol should be used
-to communicate with the server:
+A value of the C<enum> L<Audio::Libshout::Protocol> indicating which
+protocol should be used to communicate with the server:
 
 =item HTTP
 
-This is the Icecast v2 protocol and the default, this should be used unless there is a 
-compelling reason to do otherwise.
+This is the Icecast v2 protocol and the default, this should be used
+unless there is a compelling reason to do otherwise.
 
 =item XAUDIOCAST
 
@@ -246,15 +247,18 @@ The protocol used by version 1 of Icecast.
 
 =item ICY
 
-The Shoutcast protocol. If this is used then there are certain constraints on other parameters,
-it should only be used if you are using an actual Shoutcast server.
+The Shoutcast protocol. If this is used then there are certain constraints
+on other parameters, it should only be used if you are using an actual
+Shoutcast server.
 
 =head2 format 
 
-The encoding format that is to be sent as a value of the C<enum> L<Audio::Libshout::Format> - the
-default is C<Ogg>.  No transcoding is done so the data to be sent to the server must be in the
-configured format - the result of setting a different format to the actual format of the data is that
-you will get an unreadable stream. Later versions of C<libshout> might provide for further formats.
+The encoding format that is to be sent as a value of the C<enum>
+L<Audio::Libshout::Format> - the default is C<Ogg>.  No transcoding
+is done so the data to be sent to the server must be in the configured
+format - the result of setting a different format to the actual format
+of the data is that you will get an unreadable stream. Later versions
+of C<libshout> might provide for further formats.
 
 =item MP3
 
@@ -262,46 +266,50 @@ you will get an unreadable stream. Later versions of C<libshout> might provide f
 
 =head2 mount 
 
-The "mount point" (i.e. the path part ) on the server that represents this stream. There is no
-default. The C<ICY> protocol does not support setting this. On setting this will be "normalised"
-with a leading '/' (e.g. setting "stream" will return "/stream".)
+The "mount point" (i.e. the path part ) on the server that represents
+this stream. There is no default. The C<ICY> protocol does not support
+setting this. On setting this will be "normalised" with a leading '/'
+(e.g. setting "stream" will return "/stream".)
 
 =head2 dumpfile 
 
-This can be set to cause an archive of the stream to be made on the server with the provided name.
-The server may not support this (or may configured to allow it.)  The resulting file will be at
-least as large as the streamed data and if the server runs out of disk space it may interrupt the
-stream, so think carefully before using this.
+This can be set to cause an archive of the stream to be made on the
+server with the provided name.  The server may not support this (or may
+configured to allow it.)  The resulting file will be at least as large
+as the streamed data and if the server runs out of disk space it may
+interrupt the stream, so think carefully before using this.
 
 =head2 agent 
 
-This is the UserAgent header that is sent for the C<HTTP> protocol.  The default is "libshout/$version".
+This is the UserAgent header that is sent for the C<HTTP> protocol.
+The default is "libshout/$version".
 
 =head2 public 
 
-This is a L<Bool> that indicates whether the server should list the stream in any directory services that
-it has configured. The default is C<False>.
+This is a L<Bool> that indicates whether the server should list the stream
+in any directory services that it has configured. The default is C<False>.
 
 
 =head2 name 
 
-The stream name that should be used in a directory listing. This may also be passed on to connected clients.
-There is no default.
+The stream name that should be used in a directory listing. This may
+also be passed on to connected clients.  There is no default.
 
 =head2 url 
 
-The stream URL that should be used in a directory listing. This may also be passed on to connected clients.
-There is no default.
+The stream URL that should be used in a directory listing. This may also
+be passed on to connected clients.  There is no default.
 
 =head2 genre 
 
-The genre of the stream that should be used in a directory listing. This may also be passed on to connected clients.
-There is no default.
+The genre of the stream that should be used in a directory listing. This
+may also be passed on to connected clients.  There is no default.
 
 =head2 description
 
-A description of the stream that should be used in a directory listing. This may also be passed on to connected clients.
-There is no default.
+A description of the stream that should be used in a directory
+listing. This may also be passed on to connected clients.  There is
+no default.
 
 =end pod
 
