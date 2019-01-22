@@ -8,4 +8,4 @@ install:
     - sudo service icecast2 start
     - sudo apt-get install libshout3
     - rakudobrew build-zef
-    - zef --/test --deps-only install .
+    - zef install --deps-only .
