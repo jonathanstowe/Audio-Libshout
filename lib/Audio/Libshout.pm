@@ -10,24 +10,28 @@ Audio::Libshout - binding to the xiph.org libshout icecast source client
 
 =begin code
 
-    use Audio::Libshout;
+use v6;
 
+use Audio::Libshout;
+
+sub MAIN(IO(Str) $in-file) {
     my $shout = Audio::Libshout.new(password => 'hackme', mount => '/foo', format => Audio::Libshout::Format::MP3);
-    my $fh = @*ARGS[0].IO.open(:bin);
+    my $fh = $in-file.open(:bin);
     my $channel = $shout.send-channel;
 
     while not $fh.eof {
-	    my $buf = $fh.read(4096);
-	    $channel.send($buf);
+        my $buf = $fh.read(4096);
+        $channel.send($buf);
     }
 
     $fh.close;
     $channel.close;
     $shout.close;
+}
 
 =end code
 
-See also the files in the C<examples> directory
+See also the files in the L<examples|examples> directory
 
 =head1 DESCRIPTION
 
@@ -84,9 +88,19 @@ before calling C<open>.  If a connection cannot be made to the server or
 the server refuses the connection (e.g. due to an authentication failure,)
 a L<X::ShoutError> will be thrown.
 
+It should be noted that the behaviour when there is a failure after the
+initial connection to the server has been made  (such as an authentication
+problem,) may differ between versions of C<libshout>:  v2.2.2 will allow
+the connections parameters (e.g. the password,) to be changed and the 
+C<open> retried using the same instance, however later versions (I have tested
+with v2.4.3,) may fail again with "already connected" and you will need
+to create a new C<Audio::Libshout> instance with the revised parameters
+to try again.
+
 This will be called for you the first time that C<send> is called or
 the first data is sent to the C<send-channel> however you may wish to
 call it early in order to detect and rectify any problems.
+
 
 =head2 method close
 
@@ -196,6 +210,19 @@ is C<MP3>.
 
 It will throw a L<X::ShoutError> if an error is encountered while setting
 the metadata.
+
+=head2 dispose
+
+    method dispose()
+
+This will free the resources allocated by C<libshout> and de-initialise
+its internal global data. Once it has been called you should not attempt
+to send any further data to the stream and you should create a new instance
+if you need one.
+
+You may want to call this if you have a long-lived program which makes
+many relatively short-lived connections to a server.  However it may be
+simpler to C<open> and C<close> a single object as required.
 
 =head2 libshout-version
 
@@ -381,6 +408,10 @@ class Audio::Libshout:ver<0.0.11>:auth<github:jonathanstowe>:api<1.0> {
         sub shout_metadata_free(Metadata) is native(LIB) { * }
 
         method DESTROY() {
+            self.dispose;
+        }
+
+        method dispose() {
             shout_metadata_free(self);
         }
 
@@ -413,6 +444,10 @@ class Audio::Libshout:ver<0.0.11>:auth<github:jonathanstowe>:api<1.0> {
         sub shout_free(Shout --> int32 ) is native(LIB) { * }
 
         submethod DESTROY() {
+            self.dispose;
+        }
+
+        method dispose() {
             shout_free(self);
         }
 
@@ -729,10 +764,19 @@ class Audio::Libshout:ver<0.0.11>:auth<github:jonathanstowe>:api<1.0> {
         $!metadata = Metadata.new;
     }
 
-    submethod DESTROY() {
-        $!shout = Shout;
-        $!metadata = Metadata;
+    method dispose(Audio::Libshout:D:) {
+        if $!metadata.defined {
+            $!metadata = Metadata;
+        }
+        if $!shout.defined {
+            $!shout.dispose;
+            $!shout = Shout;
+        }
         $initialiser.shutdown();
+    }
+
+    submethod DESTROY() {
+        self.dispose;    
     }
 }
 

@@ -14,17 +14,21 @@
         {
           "name": "synopsis",
           "type": "file"
+        },
+        {
+          "name": "README.md",
+          "type": "file"
         }
       ],
       "name": "examples",
-      "purpose": null,
+      "purpose": "examples",
       "type": "directory"
     },
     {
       "children": [
         {
           "name": "data",
-          "purpose": null,
+          "purpose": "test data",
           "children": [
             {
               "name": "cw_glitch_noise15.mp3",
@@ -58,7 +62,7 @@
           "type": "file"
         }
       ],
-      "purpose": null,
+      "purpose": "tests",
       "name": "t",
       "type": "directory"
     },

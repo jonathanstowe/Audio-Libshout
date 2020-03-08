@@ -6,22 +6,26 @@ Audio::Libshout - binding to the xiph.org libshout icecast source client
 SYNOPSIS
 ========
 
-        use Audio::Libshout;
+    use v6;
 
+    use Audio::Libshout;
+
+    sub MAIN(IO(Str) $in-file) {
         my $shout = Audio::Libshout.new(password => 'hackme', mount => '/foo', format => Audio::Libshout::Format::MP3);
-        my $fh = @*ARGS[0].IO.open(:bin);
+        my $fh = $in-file.open(:bin);
         my $channel = $shout.send-channel;
 
         while not $fh.eof {
-	        my $buf = $fh.read(4096);
-	        $channel.send($buf);
+            my $buf = $fh.read(4096);
+            $channel.send($buf);
         }
 
         $fh.close;
         $channel.close;
         $shout.close;
+    }
 
-See also the files in the `examples` directory
+See also the files in the [examples](examples) directory
 
 DESCRIPTION
 ===========
@@ -166,7 +170,7 @@ A value of the `enum` [Audio::Libshout::Protocol](Audio::Libshout::Protocol) ind
 
   * HTTP
 
-This is the Icecast v2 protocol and the default, this should be used unless there is a  compelling reason to do otherwise.
+This is the Icecast v2 protocol and the default, this should be used unless there is a compelling reason to do otherwise.
 
   * XAUDIOCAST
 
@@ -224,3 +228,4 @@ description
 -----------
 
 A description of the stream that should be used in a directory listing. This may also be passed on to connected clients. There is no default.
+

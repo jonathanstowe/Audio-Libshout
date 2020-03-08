@@ -1,8 +1,31 @@
 # Audio::Libshout
 
-Perl 6 binding to libshout - provide icecast/streaming client
+Raku binding to libshout - provide icecast/streaming client
 
 [![Build Status](https://travis-ci.org/jonathanstowe/Audio-Libshout.svg?branch=master)](https://travis-ci.org/jonathanstowe/Audio-Libshout)
+
+## Synopsis
+
+```perl6
+use v6;
+
+use Audio::Libshout;
+
+sub MAIN(IO(Str) $in-file) {
+    my $shout = Audio::Libshout.new(password => 'hackme', mount => '/foo', format => Audio::Libshout::Format::MP3);
+    my $fh = $in-file.open(:bin);
+    my $channel = $shout.send-channel;
+
+    while not $fh.eof {
+        my $buf = $fh.read(4096);
+        $channel.send($buf);
+    }
+
+    $fh.close;
+    $channel.close;
+    $shout.close;
+}
+```
 
 ## Description
 
@@ -60,8 +83,7 @@ parameters that can be over-written by some environment variables:
    * SHOUT_TEST_PASS - the password to authenticate with.  The default is 'hackme' but you changed that right?
    * SHOUT_TEST_MOUNT - the mount point on the server to use.  The default is '/shout_test'
 
-Assuming you have a working Rakudo Perl 6 installation you should be able to
-install this with *zef* :
+Assuming you have a working Rakudo installation as well as a working icecast server you should be able to install this with *zef* :
 
     # From the source directory
    
@@ -73,9 +95,7 @@ install this with *zef* :
 
 ## Support
 
-Suggestions/patches are welcomed via github at
-
-https://github.com/jonathanstowe/Audio-Libshout
+Suggestions/patches are welcomed via [github](https://github.com/jonathanstowe/Audio-Libshout)
 
 I have tested this and found it to work with my installation of icecast,
 so it should work anywhere else, if however you experience a problem
@@ -83,8 +103,11 @@ with streaming please test with another source client such as ices or
 darkice before reporting a bug as I am unlikely to be able to help you
 with your streaming configuration.
 
+There are some small variations in the behaviour of  `libshout` between
+versions and these are documented where known in [the Documentation](Documentation.md) however please supply the `libshout` version if you find unexpected behaviour.
+
 ## Licence
 
 Please see the [LICENCE](LICENCE) file in the distribution
 
-© Jonathan Stowe 2015, 2016, 2017, 2019
+© Jonathan Stowe 2015, 2016, 2017, 2019, 2020

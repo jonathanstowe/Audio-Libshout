@@ -14,7 +14,7 @@ my $mount = %*ENV<SHOUT_TEST_MOUNT> // '/shout_test';
 
 my $test-data = $*CWD.child('t/data');
 
-plan 128;
+plan 123;
 
 if not check-socket($port, $host) {
     diag "not performing live tests as no icecast server";
@@ -25,7 +25,6 @@ if not check-socket($port, $host) {
 my $obj;
 
 lives-ok { $obj = Audio::Libshout.new }, "create an Audio::Libshout object";
-
 lives-ok {
 $obj.host = $host;
 $obj.port = $port;
@@ -39,14 +38,7 @@ $obj.password = 'S0me8oGusP455w0RD!%';
 
 throws-like { $obj.open }, rx/"The server refused login, probably because authentication failed"/, "open with wrong password should fail";
 
-$obj.password = $pass;
-
-lives-ok { $obj.open }, "open with good password";
-lives-ok { $obj.open }, "open again to check it's safe";
-lives-ok { $obj.close }, "close it";
-lives-ok { $obj.close }, "close it again to check";
-lives-ok { $obj.open }, "open again again to check it's safe";
-lives-ok { $obj.close }, "close it";
+lives-ok { $obj.dispose }, "dispose with that object";
 
 my @tests = { file => 'cw_glitch_noise15.mp3', format => Audio::Libshout::Format::MP3 },
             { file => 'cw_glitch_noise15.ogg', format => Audio::Libshout::Format::Ogg };

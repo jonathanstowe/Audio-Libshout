@@ -1,3 +1,7 @@
+v0.0.12		Sat  7 Mar 13:44:51 GMT 2020
+	*	Switch CI tests to use docker
+	* 	Document different open behaviour between libshout versions
+	*	Perl6 → Raku changes
 v0.0.11		Sun 20 Jan 12:00:04 GMT 2019
 	* Spring clean and upload to CPAN
 v0.0.10		Tue Jan 24 21:25:29 2017 +0000 
