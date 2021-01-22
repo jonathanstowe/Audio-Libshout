@@ -72,10 +72,6 @@
     },
     {
       "type": "file",
-      "name": "Build.pm"
-    },
-    {
-      "type": "file",
       "name": "Documentation.md"
     },
     {
