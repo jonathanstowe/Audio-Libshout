@@ -6,7 +6,7 @@ use CheckSocket;
 
 use Audio::Libshout;
 
-my $host = %*ENV<SHOUT_TEST_HOST> // 'localhost';
+my $host = %*ENV<SHOUT_TEST_HOST> // '127.0.0.1';
 my $port = %*ENV<SHOUT_TEST_PORT> // 8000;
 my $user = %*ENV<SHOUT_TEST_USER> // 'source';
 my $pass = %*ENV<SHOUT_TEST_PASS> // 'hackme';
@@ -84,8 +84,8 @@ for @tests -> $test {
         $last = $tmp_buf.elems < 1024;
         lives-ok { $obj.send($tmp_buf) }, "sending { $tmp_buf.elems } synchronously";
         lives-ok { $obj.sync }, "sync stream";
-        lives-ok { 
-            $obj.add-metadata(sent => $tmp_buf.elems.Str ) 
+        lives-ok {
+            $obj.add-metadata(sent => $tmp_buf.elems.Str )
         }, "set some metadata";
     }
 
