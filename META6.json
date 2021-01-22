@@ -25,7 +25,6 @@
      },
      "runtime": {
         "requires": [
-           "shout:from<native>",
            "AccessorFacade"
         ]
      }
