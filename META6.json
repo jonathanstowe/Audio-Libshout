@@ -1,6 +1,6 @@
 {
   "name": "Audio::Libshout",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "auth": "github:jonathanstowe",
   "api": "1.0",
   "description": "Binding for libshout - source streaming client library for icecast",

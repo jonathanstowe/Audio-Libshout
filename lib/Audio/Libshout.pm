@@ -91,7 +91,7 @@ a L<X::ShoutError> will be thrown.
 It should be noted that the behaviour when there is a failure after the
 initial connection to the server has been made  (such as an authentication
 problem,) may differ between versions of C<libshout>:  v2.2.2 will allow
-the connections parameters (e.g. the password,) to be changed and the 
+the connections parameters (e.g. the password,) to be changed and the
 C<open> retried using the same instance, however later versions (I have tested
 with v2.4.3,) may fail again with "already connected" and you will need
 to create a new C<Audio::Libshout> instance with the revised parameters
@@ -133,7 +133,7 @@ a C<CArray[uint8]> and the second an C<Int> which is the number of
 bytes in the array, this reflects the return value of the C<encode>
 methods of L<Audio::Encode::LameMP3> with the C<:raw> adverb. This
 is intended to reduce the marshalling required when there is no
-need to have the data in perl space.
+need to have the data in Raku space.
 
 If you don't want to be concerned with the synchronisation issues then you
 should consider the asynchronous interface provided by C<send-channel>.
@@ -153,7 +153,7 @@ If you don't want to be concerned with the synchronisation issues then you
 should consider the asynchronous interface provided by C<send-channel>.
 
 =head2 method send-channel
-    
+
     multi method send-channel() returns Channel
     multi method send-channel(Channel $channel) returns Channel
 
@@ -238,27 +238,27 @@ opened. Setting a parameter that doesn't make sense given the state of
 the stream or already set parameters will result in a L<X::ShoutError>
 being thrown.
 
-=head2 host 
+=head2 host
 
 The hostname or IP address of the streaming server.  The default is
 'localhost'.
 
-=head2 port 
+=head2 port
 
 The port number on which the server is listening.  The default is 8000
 
-=head2 user 
+=head2 user
 
 The username that is used to authenticate against the server, the default
 is 'source'.  If the C<protocol> is set to C<ICY> then setting this
 makes no sense as 'source' is always used.
 
-=head2 password 
+=head2 password
 
 The password that is used to authenticate with the server.  There is no
 default and this must be provided before connecting.
 
-=head2 protocol 
+=head2 protocol
 
 A value of the C<enum> L<Audio::Libshout::Protocol> indicating which
 protocol should be used to communicate with the server:
@@ -278,7 +278,7 @@ The Shoutcast protocol. If this is used then there are certain constraints
 on other parameters, it should only be used if you are using an actual
 Shoutcast server.
 
-=head2 format 
+=head2 format
 
 The encoding format that is to be sent as a value of the C<enum>
 L<Audio::Libshout::Format> - the default is C<Ogg>.  No transcoding
@@ -291,14 +291,14 @@ of C<libshout> might provide for further formats.
 
 =item Ogg
 
-=head2 mount 
+=head2 mount
 
 The "mount point" (i.e. the path part ) on the server that represents
 this stream. There is no default. The C<ICY> protocol does not support
 setting this. On setting this will be "normalised" with a leading '/'
 (e.g. setting "stream" will return "/stream".)
 
-=head2 dumpfile 
+=head2 dumpfile
 
 This can be set to cause an archive of the stream to be made on the
 server with the provided name.  The server may not support this (or may
@@ -306,28 +306,28 @@ configured to allow it.)  The resulting file will be at least as large
 as the streamed data and if the server runs out of disk space it may
 interrupt the stream, so think carefully before using this.
 
-=head2 agent 
+=head2 agent
 
 This is the UserAgent header that is sent for the C<HTTP> protocol.
 The default is "libshout/$version".
 
-=head2 public 
+=head2 public
 
 This is a L<Bool> that indicates whether the server should list the stream
 in any directory services that it has configured. The default is C<False>.
 
 
-=head2 name 
+=head2 name
 
 The stream name that should be used in a directory listing. This may
 also be passed on to connected clients.  There is no default.
 
-=head2 url 
+=head2 url
 
 The stream URL that should be used in a directory listing. This may also
 be passed on to connected clients.  There is no default.
 
-=head2 genre 
+=head2 genre
 
 The genre of the stream that should be used in a directory listing. This
 may also be passed on to connected clients.  There is no default.
@@ -340,7 +340,7 @@ no default.
 
 =end pod
 
-class Audio::Libshout:ver<0.0.11>:auth<github:jonathanstowe>:api<1.0> {
+class Audio::Libshout:ver<0.0.13>:auth<github:jonathanstowe>:api<1.0> {
     use NativeCall;
     use AccessorFacade;
 
@@ -464,7 +464,7 @@ class Audio::Libshout:ver<0.0.11>:auth<github:jonathanstowe>:api<1.0> {
             my $rc = shout_close(self);
             Error($rc);
         }
-        
+
         sub shout_send(Shout, CArray[uint8], int32 --> int32 ) is native(LIB) { * }
 
         proto method send(|c) { * }
@@ -776,8 +776,8 @@ class Audio::Libshout:ver<0.0.11>:auth<github:jonathanstowe>:api<1.0> {
     }
 
     submethod DESTROY() {
-        self.dispose;    
+        self.dispose;
     }
 }
 
-# vim: expandtab shiftwidth=4 ft=perl6
+# vim: expandtab shiftwidth=4 ft=raku

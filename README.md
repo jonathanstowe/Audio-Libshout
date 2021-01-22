@@ -2,11 +2,11 @@
 
 Raku binding to libshout - provide icecast/streaming client
 
-[![Build Status](https://travis-ci.org/jonathanstowe/Audio-Libshout.svg?branch=master)](https://travis-ci.org/jonathanstowe/Audio-Libshout)
+![Build Status](https://github.com/jonathanstowe/Audio-Libshout/workflows/CI/badge.svg)
 
 ## Synopsis
 
-```perl6
+```raku
 use v6;
 
 use Audio::Libshout;
@@ -110,4 +110,4 @@ versions and these are documented where known in [the Documentation](Documentati
 
 Please see the [LICENCE](LICENCE) file in the distribution
 
-© Jonathan Stowe 2015, 2016, 2017, 2019, 2020
+© Jonathan Stowe 2015, 2016, 2017, 2019, 2020, 2021

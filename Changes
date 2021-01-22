@@ -1,3 +1,6 @@
+v0.0.13		Fri 22 Jan 15:47:14 GMT 2021
+	* Switch to use GH Action rather than Travis
+	* Some light spring cleaning
 v0.0.12		Sat  7 Mar 13:44:51 GMT 2020
 	*	Switch CI tests to use docker
 	* 	Document different open behaviour between libshout versions

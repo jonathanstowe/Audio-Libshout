@@ -63,6 +63,8 @@ method open
 
 If the stream is not already connected this will open the stream so that data can be sent. The `host`, `port`, `user` and `password` and other parameters that may be required by the protocol must be set before calling `open`. If a connection cannot be made to the server or the server refuses the connection (e.g. due to an authentication failure,) a [X::ShoutError](X::ShoutError) will be thrown.
 
+It should be noted that the behaviour when there is a failure after the initial connection to the server has been made (such as an authentication problem,) may differ between versions of `libshout`: v2.2.2 will allow the connections parameters (e.g. the password,) to be changed and the `open` retried using the same instance, however later versions (I have tested with v2.4.3,) may fail again with "already connected" and you will need to create a new `Audio::Libshout` instance with the revised parameters to try again.
+
 This will be called for you the first time that `send` is called or the first data is sent to the `send-channel` however you may wish to call it early in order to detect and rectify any problems.
 
 method close
@@ -81,7 +83,7 @@ method send
 
 This will send the [Buf](Buf) of unsigned chars ([uint8](uint8),) to the server. The buffer must contain data encoded as per that set for `format` (i.e. either `Ogg` or `MP3` ) If there is a problem sending the data to the server then a [X::ShoutError](X::ShoutError) will be thrown. If `open` has not already been called it will be called for you and this may also throw an exception. The data will be sent immediately so `sync` should be called between each attempt to send or an exception may be thrown indicating that the server is busy.
 
-The second multi variant is intended to make interoperation with other libraries which may return encoded data in a `CArray`. The third is similar but accepts an `Array` of two elements the first being a `CArray[uint8]` and the second an `Int` which is the number of bytes in the array, this reflects the return value of the `encode` methods of [Audio::Encode::LameMP3](Audio::Encode::LameMP3) with the `:raw` adverb. This is intended to reduce the marshalling required when there is no need to have the data in perl space.
+The second multi variant is intended to make interoperation with other libraries which may return encoded data in a `CArray`. The third is similar but accepts an `Array` of two elements the first being a `CArray[uint8]` and the second an `Int` which is the number of bytes in the array, this reflects the return value of the `encode` methods of [Audio::Encode::LameMP3](Audio::Encode::LameMP3) with the `:raw` adverb. This is intended to reduce the marshalling required when there is no need to have the data in Raku space.
 
 If you don't want to be concerned with the synchronisation issues then you should consider the asynchronous interface provided by `send-channel`.
 
@@ -133,6 +135,15 @@ This will send the metadata as added or updated by `add-metadata` to the connect
 
 It will throw a [X::ShoutError](X::ShoutError) if an error is encountered while setting the metadata.
 
+dispose
+-------
+
+    method dispose()
+
+This will free the resources allocated by `libshout` and de-initialise its internal global data. Once it has been called you should not attempt to send any further data to the stream and you should create a new instance if you need one.
+
+You may want to call this if you have a long-lived program which makes many relatively short-lived connections to a server. However it may be simpler to `open` and `close` a single object as required.
+
 libshout-version
 ----------------
 
@@ -143,28 +154,28 @@ STREAM PARAMETERS
 
 These can all be supplied to the constructor as named arguments or set as attributes on a new object, some provide sensible defaults which are noted and some are required and must be set before the stream is opened. Setting a parameter that doesn't make sense given the state of the stream or already set parameters will result in a [X::ShoutError](X::ShoutError) being thrown.
 
-host 
------
+host
+----
 
 The hostname or IP address of the streaming server. The default is 'localhost'.
 
-port 
------
+port
+----
 
 The port number on which the server is listening. The default is 8000
 
-user 
------
+user
+----
 
 The username that is used to authenticate against the server, the default is 'source'. If the `protocol` is set to `ICY` then setting this makes no sense as 'source' is always used.
 
-password 
----------
+password
+--------
 
 The password that is used to authenticate with the server. There is no default and this must be provided before connecting.
 
-protocol 
----------
+protocol
+--------
 
 A value of the `enum` [Audio::Libshout::Protocol](Audio::Libshout::Protocol) indicating which protocol should be used to communicate with the server:
 
@@ -180,8 +191,8 @@ The protocol used by version 1 of Icecast.
 
 The Shoutcast protocol. If this is used then there are certain constraints on other parameters, it should only be used if you are using an actual Shoutcast server.
 
-format 
--------
+format
+------
 
 The encoding format that is to be sent as a value of the `enum` [Audio::Libshout::Format](Audio::Libshout::Format) - the default is `Ogg`. No transcoding is done so the data to be sent to the server must be in the configured format - the result of setting a different format to the actual format of the data is that you will get an unreadable stream. Later versions of `libshout` might provide for further formats.
 
@@ -189,38 +200,38 @@ The encoding format that is to be sent as a value of the `enum` [Audio::Libshout
 
   * Ogg
 
-mount 
-------
+mount
+-----
 
 The "mount point" (i.e. the path part ) on the server that represents this stream. There is no default. The `ICY` protocol does not support setting this. On setting this will be "normalised" with a leading '/' (e.g. setting "stream" will return "/stream".)
 
-dumpfile 
----------
+dumpfile
+--------
 
 This can be set to cause an archive of the stream to be made on the server with the provided name. The server may not support this (or may configured to allow it.) The resulting file will be at least as large as the streamed data and if the server runs out of disk space it may interrupt the stream, so think carefully before using this.
 
-agent 
-------
+agent
+-----
 
 This is the UserAgent header that is sent for the `HTTP` protocol. The default is "libshout/$version".
 
-public 
--------
+public
+------
 
 This is a [Bool](Bool) that indicates whether the server should list the stream in any directory services that it has configured. The default is `False`.
 
-name 
------
+name
+----
 
 The stream name that should be used in a directory listing. This may also be passed on to connected clients. There is no default.
 
-url 
-----
+url
+---
 
 The stream URL that should be used in a directory listing. This may also be passed on to connected clients. There is no default.
 
-genre 
-------
+genre
+-----
 
 The genre of the stream that should be used in a directory listing. This may also be passed on to connected clients. There is no default.
 
