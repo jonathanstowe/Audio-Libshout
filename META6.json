@@ -1,46 +1,49 @@
 {
-  "name": "Audio::Libshout",
-  "version": "0.0.13",
-  "auth": "github:jonathanstowe",
-  "api": "1.0",
-  "description": "Binding for libshout - source streaming client library for icecast",
-  "source-url": "https://github.com/jonathanstowe/Audio-Libshout.git",
-  "support": {
-    "source": "https://github.com/jonathanstowe/Audio-Libshout.git",
-    "bugtracker": "https://github.com/jonathanstowe/Audio-Libshout/issues"
-  },
-  "perl": "6.*",
-  "raku": "6.*",
-  "resources": [
-  ],
-  "depends": {
-     "build" : {
-        "requires" : [
-        ]
-     },
-     "test" : {
-        "requires" : [
-           "CheckSocket"
-        ]
-     },
-     "runtime": {
-        "requires": [
-           "AccessorFacade"
-        ]
-     }
+  "auth": "zef:jonathanstowe",
+  "provides": {
+    "Audio::Libshout": "lib/Audio/Libshout.pm"
   },
   "author": "Jonathan Stowe <jns+git@gellyfish.co.uk>",
+  "build-depends": [
+  ],
+  "authors": [
+    "Jonathan Stowe <jns+git@gellyfish.co.uk>"
+  ],
+  "depends": {
+    "build": {
+      "requires": [
+      ]
+    },
+    "test": {
+      "requires": [
+        "CheckSocket"
+      ]
+    },
+    "runtime": {
+      "requires": [
+        "AccessorFacade"
+      ]
+    }
+  },
+  "description": "Binding for libshout - source streaming client library for icecast",
+  "support": {
+    "bugtracker": "https://github.com/jonathanstowe/Audio-Libshout/issues",
+    "source": "https://github.com/jonathanstowe/Audio-Libshout.git"
+  },
+  "test-depends": [
+  ],
+  "api": "1.0",
+  "version": "0.0.14",
+  "resources": [
+  ],
   "tags": [
     "audio",
     "streaming",
     "utils"
   ],
   "license": "Artistic-2.0",
-  "provides": {
-    "Audio::Libshout": "lib/Audio/Libshout.pm"
-  },
-  "authors": [
-    "Jonathan Stowe <jns+git@gellyfish.co.uk>"
-  ],
-  "meta-version": "1"
+  "meta-version": "1",
+  "raku": "6.*",
+  "name": "Audio::Libshout",
+  "source-url": "https://github.com/jonathanstowe/Audio-Libshout.git"
 }
