@@ -84,7 +84,7 @@
           "children": [
             {
               "type": "file",
-              "name": "Libshout.pm"
+              "name": "Libshout.rakumod"
             }
           ]
         }

@@ -1,7 +1,7 @@
 {
   "auth": "zef:jonathanstowe",
   "provides": {
-    "Audio::Libshout": "lib/Audio/Libshout.pm"
+    "Audio::Libshout": "lib/Audio/Libshout.rakumod"
   },
   "author": "Jonathan Stowe <jns+git@gellyfish.co.uk>",
   "build-depends": [
@@ -33,7 +33,7 @@
   "test-depends": [
   ],
   "api": "1.0",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "resources": [
   ],
   "tags": [

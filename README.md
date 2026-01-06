@@ -110,4 +110,4 @@ versions and these are documented where known in [the Documentation](Documentati
 
 Please see the [LICENCE](LICENCE) file in the distribution
 
-© Jonathan Stowe 2015, 2016, 2017, 2019, 2020, 2021
+© Jonathan Stowe 2015 - 2026
